@@ -170,14 +170,12 @@ Returns results starting with the 100th movie object in the results set.
 
 **Example response**
 
-The following is an example response payload for the request `GET /movies?page=5&pageSize10`. The request returns page 5 of the results set with 10 items on the page. By default, the results set starts at item 0 in the collection.
+The following is an example response payload for the request `GET /movies?page=5&pageSize10`. The request returns page 5 of the results set with 10 items on the page.
 
 ```json
 {
     "page": 5,
     "itemLimit": 10,
-    "offset": default,
-    ...
 }
 ```
 For more information about pagination query parameters for `GET /accounts/{accountId}/lists` or `GET /movies`, see the Swagger documentation.
