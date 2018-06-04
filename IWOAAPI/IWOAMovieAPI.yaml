@@ -1,0 +1,1039 @@
+openapi: "3.0.0"
+
+# Document metadata
+info:
+  title: IWOA Movie API Service
+  description: This mock API allows developers to access the _Inside the World of Amy_ database of movie reviews for use in their own applications. With the API, developers can allow their users to create and maintain lists of movies. For example, consumers of their applications could create, update, or delete lists of favorite movies, movies based on genre or release year, or flag movies that they want to watch. They could also add and remove movies from their different lists.
+  version: "0.1.0"
+ 
+# Mock servers for endpoints
+servers:
+  - url: https://www.insidetheworldofamy.com/v1/api
+    description: Mock production server
+  - url: https://development.insidetheworldofamy.com/v1/api
+    description: Mock development server
+
+paths:
+  # Get request token
+  /authentication/tokens/new:
+    get:
+      tags:
+        - authentication
+      summary: Get request token
+      description: Returns a request token for a user.
+      operationId: getToken
+   
+      responses:
+        200:
+          description: Successfully generated new request token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/requestToken'
+        401:
+          $ref: '#/components/responses/401'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        504:
+          $ref: '#/components/responses/504'
+        
+  # Get session ID
+  /authentication/sessions/new:
+    get:
+      tags:
+        - authentication
+      summary: Get session ID
+      description: Returns a session ID for a user.
+      operationId: getSessionId
+      parameters:
+        - $ref: '#/components/parameters/requestTokenParam'
+    
+      responses:
+        200:
+          description: Successfully generated session ID
+          content:
+            application/json:
+             schema:
+               $ref: '#/components/schemas/sessionId'
+        401:
+          $ref: '#/components/responses/401'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        504:
+          $ref: '#/components/responses/504'
+          
+  # Get account information
+  /accounts:
+    get:
+      tags:
+        - accounts
+      summary: Get account information
+      description: Returns account details.
+      operationId: getAccounts
+      parameters:
+        - $ref: '#/components/parameters/sessionIdParam'
+          
+      responses:
+        200:
+          description: Successfully returned account information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountInfo'
+        401:
+          $ref: '#/components/responses/401'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        504:
+          $ref: '#/components/responses/504'
+
+
+  # Get lists of movies created by an account
+  /accounts/{accountId}/lists:
+    get:
+      tags:
+        - accounts
+      summary: Get movie lists
+      description: Returns movie lists created by an account.
+      operationId: getMovieListsByAccountId
+      parameters:
+        - $ref: '#/components/parameters/accountIdParam'
+        # API pagination to limit amount of data returned in single call
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/itemLimitParam'
+        - $ref: '#/components/parameters/sessionIdParam'
+
+      responses:
+        200:
+          description: Successfully returned movie lists created by account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/movieListsByAccount'
+        401:
+          $ref: '#/components/responses/401'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        504:
+          $ref: '#/components/responses/504'
+
+  # Get rate limit info
+  /rateLimit:
+    get:
+      tags:
+        - rate limit
+      summary: Get rate limit information
+      description: Returns rate limit amount used, remaining, and reset time.
+      operationId: getRateLimit
+      
+      responses:
+        200: 
+          description: Successfully returned rate limit information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rateLimit'
+
+  # Get movies
+  /movies:
+    get:
+      tags:
+        - movies
+      summary: Get all movies
+      description: Returns all movies in the database.
+      operationId: getMovies
+      parameters:
+        # API pagination to limit amount of data returned in single call
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/pageLimitParam'
+        - $ref: '#/components/parameters/itemLimitParam'
+        # Other query params
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/startParam'
+        - $ref: '#/components/parameters/yearParam'
+        - $ref: '#/components/parameters/genreParam'
+        - $ref: '#/components/parameters/reviewParam'
+
+      responses:
+        200:
+          description: Successfully returned all movies in database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/allMovieInfo'
+        401:
+          $ref: '#/components/responses/401'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        504:
+          $ref: '#/components/responses/504'
+
+  # Get movie details
+  /movies/{movieId}:
+    get:
+      tags:
+        - movies
+      summary: Get movie details
+      description: Returns information about a movie.
+      operationId: getMoviesById
+      parameters:
+        - $ref: '#/components/parameters/movieIdParam'
+
+      responses:
+        200:
+          description: Successfully returned movie information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/movieInfo'
+        401:
+          $ref: '#/components/responses/401'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        504:
+          $ref: '#/components/responses/504'
+
+  # Get movie genres
+  /movies/genres:
+    get:
+      tags:
+        - movies
+      summary: Get movie genres
+      description: Returns a list of movie genres.
+      operationId: getMovieGenres
+
+      responses:
+        200:
+          description: Successfully returned list of genres
+          content:
+            application/json:
+              schema:
+                description: Collection of movie genres
+                type: array
+                items:
+                  $ref: '#/components/schemas/genre'
+        401:
+          $ref: '#/components/responses/401'
+        404:
+          $ref: '#/components/responses/404' 
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        504:
+          $ref: '#/components/responses/504'
+
+  # Create movie lists
+  /lists/list:
+    post:
+      tags:
+        - lists
+      summary: Create movie list
+      description: Creates a movie list associated with an account.
+      operationId: createMovieList
+      parameters:
+        - $ref: '#/components/parameters/sessionIdParam'
+      requestBody:
+        $ref: '#/components/requestBodies/listBody'
+
+      responses:
+        201:
+          description: Successfully created movie list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createdMovieListInfo'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        504:
+          $ref: '#/components/responses/504'
+
+  # Get or delete a movie list
+  /lists/{listId}:
+    get:
+      tags:
+        - lists
+      summary: Get movie list
+      description: Returns information about a movie list associated with an account.
+      operationId: getMovieListsById
+      parameters:
+        - $ref: '#/components/parameters/listIdParam'
+        - $ref: '#/components/parameters/sessionIdParam'
+
+      responses:
+        200:
+          description: Successfully returned information about a movie list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/movieListInfo'
+        401:
+          $ref: '#/components/responses/401'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        504:
+          $ref: '#/components/responses/504'
+          
+    delete:
+      tags:
+        - lists
+      summary: Delete movie list
+      description: Deletes a movie list associated with an account.
+      operationId: deleteMovieListById
+      parameters:
+        - $ref: '#/components/parameters/listIdParam'
+        - $ref: '#/components/parameters/sessionIdParam'
+
+      responses:
+        204:
+          description: Successful deleted movie list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deletedMovieListInfo'
+        401:
+          $ref: '#/components/responses/401'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        504:
+          $ref: '#/components/responses/504'
+                
+ # Add movie to a movie list
+  /lists/{listId}/addItem:
+    post:
+      tags:
+        - lists
+      summary: Add movie to movie list
+      description: Adds a movie to a movie list associated with an account.
+      operationId: addMovie
+      parameters:
+        - $ref: '#/components/parameters/listIdParam'
+        - $ref: '#/components/parameters/sessionIdParam'
+      requestBody:
+        $ref: '#/components/requestBodies/addMovieBody'
+        
+      responses:
+        201:
+          description: Successful added movie to movie list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updateMovieInList'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        504:
+          $ref: '#/components/responses/504'
+                
+ # Remove movie from a movie list
+  /lists/{listId}/removeItem:
+    post:
+      tags:
+        - lists
+      summary: Remove movie from movie list
+      description: Removes a movie from a movie list associated with an account.
+      operationId: deleteMovie
+      parameters:
+        - $ref: '#/components/parameters/listIdParam'
+        - $ref: '#/components/parameters/sessionIdParam'
+      requestBody:
+        $ref: '#/components/requestBodies/removeMovieBody'
+
+      responses:
+        201:
+          description: Successful removed movie from movie list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updateMovieInList'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+        504:
+          $ref: '#/components/responses/504'
+       
+tags:
+  - name: authentication
+    description: Operations about authentication
+  - name: accounts
+    description: Access to accounts
+  - name: movies
+    description: Operations about movies
+  - name: lists
+    description: Operations about lists
+  - name: rate limit
+    description: Operations about rate limits
+    
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: apiKey
+      in: query
+      description: API authorizes requests through an API key as a query parameter.
+  parameters:
+    requestTokenParam:
+      name: requestToken
+      in: query
+      description: Request token
+      required: true
+      schema:
+        type: string
+      example: ff5c7eeb5a8870efe3cd7fc5c282cffd26800ecd
+    sessionIdParam:
+      name: sessionId
+      in: query
+      description: Session ID
+      required: true
+      schema:
+        type: string
+      example: 79191836ddaa0da3df76a5ffef6f07ad6ab0c641
+    accountIdParam:
+      name: accountId
+      in: path
+      description: Account ID
+      required: true
+      schema:
+        type: integer
+      example: 192473388
+    pageParam:
+      name: page
+      in: query
+      description: Specific page of results to return
+      required: false
+      schema:
+        type: integer
+      # Returns fifth page of results
+      example: 5
+    pageLimitParam:
+      name: pageLimit
+      in: query
+      description: Number of pages of results to return
+      required: false
+      schema:
+        type: integer
+      # Returns only 5 pages of results
+      example: 5
+    itemLimitParam:
+      name: itemLimit
+      in: query
+      description: Number of items to return per page. By default, each page returns 25 items.
+      required: false
+      schema: 
+        type: integer
+      # Returned results limited to 10 items
+      example: 10
+    offsetParam:
+      name: offset
+      in: query
+      description: Number of items to skip before collecting the result set
+      required: false
+      schema:
+        type: integer
+      # Returned results start at item 101
+      example: 100
+    startParam:
+      name: start
+      in: query
+      description: Movies returned in alphabetical order
+      required: false
+      schema:
+        type: string
+        enum: [ascending, descending]
+        default: ascending
+      example: descending
+    yearParam:
+      name: year
+      in: query
+      description: Release year of movies to return
+      required: false
+      schema: 
+        type: string
+      example: 1986
+    genreParam:
+      name: genreId
+      in: query
+      description: Genre ID of movies to return
+      required: false
+      schema:
+        type: integer
+      example: 516734
+    reviewParam:
+      name: review
+      in: query
+      description: Movie review returned in full, partial (first 100 words), or not at all
+      required: false
+      schema:
+        type: string
+        enum: [full, partial, none]
+        default: full
+      example: partial
+    movieIdParam:
+      name: movieId
+      in: path
+      description: ID of the movie to return information about
+      required: true
+      schema:
+        type: integer
+      example: 285937822
+    listIdParam:
+      name: listId
+      in: path
+      description: Movie list ID
+      required: true
+      schema:
+        type: integer
+      example: 238751
+      
+  responses:
+    400:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    401:
+      description: Authentication failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    404:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    500:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    503:
+      description: Service unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    504:
+      description: Gateway timed out
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+
+  schemas:
+    error:
+      description: Error code and message
+      type: object
+      properties:
+        errorCode:
+          description: Error code
+          type: integer
+          example: 0
+        errorMessage:
+          description: Error message
+          type: string
+          example: ""
+      required:
+        - errorCode
+        - errorMessage
+    requestToken:
+      description: Request token
+      type: object
+      properties:
+        expiresAt:
+          type: string
+          description: Expiration date and time
+          example: 2018-03-21 13:05:15 UTC
+        requestToken:
+          type: string
+          description: Request token for user
+          example: ff5c7eeb5a8870efe3cd7fc5c282cffd26800ecd
+    sessionId:
+      description: Session ID
+      type: object
+      properties:
+        sessionId:
+          type: string
+          example: 79191836ddaa0da3df76a5ffef6f07ad6ab0c641
+    accountInfo:
+      description: Account info
+      type: object
+      properties:
+        accountId:
+          type: integer
+          description: Account ID
+          example: 192473388
+        accountName:
+          type: string
+          description: Account name
+          example: Amy Miller
+        username:
+          type: string
+          description: User name associated with account
+          example: amy.miller@acme.com
+    rateLimit:
+      description: Information about rate limit
+      type: object
+      properties:
+        rate:
+          type: object
+          description: Rate limit object
+          $ref: '#/components/schemas/rate'
+    rate:
+      description: Information about rate limit object
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Total amount of API calls allowed per current rate limit window
+          example: 5000
+        remaining:
+          type: integer
+          description: Number of API requests remaining per current rate limit window
+          example: 1298
+        reset:
+          type: integer
+          description: Time when the current rate limit window resets in UTC epoch seconds
+          example: 1528099532
+    movieListsByAccount:
+      description:  Information about movie lists
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Returned query parameter. Specific page of results to return.
+          example: 5
+        itemLimit:
+          type: integer
+          description: Returned query parameter. Number of items to return per page. By default, each page returns 25 items.
+          example: 10
+        totalItems:
+          type: integer
+          description: Total number of items in collection
+          example: 17
+        results:
+          type: array
+          description: Collection of movie lists associated with acccount
+          items:
+            $ref: '#/components/schemas/movieListInfo'
+        totalPages:
+          type: integer
+          description: Total number of pages of results
+          example: 4
+        totalResults:
+          type: integer
+          description: Total number of results
+          example: 38
+    allMovieInfo:
+      description: Information about individual movies
+      type: object
+      properties:
+        page:
+          type: integer
+          description:  Returned query parameter. Specific page of results to return.
+          example: 5
+        pageLimit:
+          type: integer
+          description: Returned query paramter. Number of pages of results to return.
+          example: 5
+        itemLimit:
+          type: integer
+          description: Returned query parameter. Number of items to return per page. By default, each page returns 25 items.
+          example: 10
+        totalItems:
+          type: integer
+          description: Total number of items in collection
+          example: 900
+        offset:
+          type: integer
+          description: Returned query parameter. Number of items to skip before collecting the result set.
+          example: 100
+        start:
+          type: string
+          description: Returned query parameter. Movies in ascending or descending alphabetical order.
+          example: descending
+        year:
+          type: string
+          description: Returned query parameter. Release year of movies to return
+          example: 1949
+        genreId:
+          type: integer
+          description: Returned query parameter. Genre ID of movies to return
+          example: 516734
+        review:
+          type: string
+          description: Returned query parameter. Movie review returned in full, partial (first 100 words), or not at all
+          example: partial
+        results:
+          type: array
+          description: Movie objects
+          items:
+            $ref: '#/components/schemas/movieInfo'
+    movieInfo:
+      description: Information about individual movies
+      type: object
+      properties:
+        movieId:
+          type: integer
+          description: Movie ID
+          example: 285937822
+        movieName:
+          type: string
+          description: Movie name
+          example: The Third Man
+        releaseYear:
+          type: string
+          format: date
+          description: Year movie was released
+          example: 1949
+        genre:
+          type: array
+          description: Collection of genres
+          items:
+            $ref: '#/components/schemas/genre'
+        keywords:
+          type: array
+          description: Collection of keywords
+          items:
+            $ref: '#/components/schemas/keywords'
+        review:
+          type: string
+          description: Movie review
+          example: >
+            Considered one of the best film noir, The Third Man is set in the ideal film noir location':' post-World War II Vienna. With its cobblestone streets and bombed buildings lying in rubbles, Vienna was the perfect backdrop for such a movie.
+
+            Famous author Graham Greene initially visited Vienna to conjure up ideas for a film. In Vienna, he heard tales about post-WW II deprivation, the flourishing black market, and the sewer system that allowed one to move from sector to sector without showing papers. (Vienna was divided into four quadrants—British, American, French, and Russian—as well as a shared...
+    genre:
+      description: Information about genre
+      type: object
+      properties:
+        genreId:
+          type: integer
+          description: Genre ID
+          example: 516734
+        genreName:
+          type: string
+          description: Genre name
+          example: Film noir
+    keywords:
+      description: Information about keywords
+      type: object
+      properties:
+        keywordId:
+          type: integer
+          description: Keyword ID
+          example: 293014877
+        keywordName:
+          type: string
+          description: Keyword name
+          example: black & white
+    createList:
+      description: Information about a new movie list
+      type: object
+      properties:
+        listName:
+          type: string
+          description: Name of new movie list
+          example: Film Noir Movies
+        listDescription:
+          type: string
+          description: Description of the new movie list
+          example: List of film noir movies
+        accountId:
+          type: integer
+          description: ID of account associated with movie list
+          example: 192473388 
+        accountName:
+          type: string
+          description: Name of account associated with movie list
+          example: Amy Miller
+    movieList:
+      description: Information about movie list
+      type: object
+      properties:
+        listId:
+          type: integer
+          description: ID of the movie list
+          example: 238751
+        listName:
+          type: string
+          description: Name of the movie list
+          example: Film Noir Movies
+    createdMovieListInfo:
+      description: Information about a created movie list
+      type: object
+      properties:
+        listId: 
+          type: integer
+          description: ID of the movie list
+          example: 238751
+        listName:
+          type: string
+          description: Name of the movie list
+          example: Film Noir Movies
+        listDescription:
+          type: string
+          description: Description of the movie list
+          example: List of film noir movies
+        accountId:
+          type: integer
+          description: Account ID
+          example: 192473388
+        accountName:
+          type: string
+          description: Account name
+          example: Amy Miller
+        createdBy:
+          type: string
+          description: User name that created the movie list
+          example: amy.miller@acme.com
+        createdDate:
+          type: string
+          description: Date movie list was created
+          example: '2018-03-04'
+    movieListInfo:
+      description: Information about a movie list
+      type: object
+      properties:
+        listId:
+          type: integer
+          description: ID of the movie list
+          example: 238751
+        listName:
+          type: string
+          description: Name of the movie list
+          example: Film Noir Movies
+        listDescription:
+          type: string
+          description: Description of the movie list
+          example: List of film noir movies
+        createdBy:
+          type: string
+          description: User name that created the movie list
+          example: amy.miller@acme.com
+        createdDate:
+          type: string
+          description: Date movie list was created
+          example: '2018-03-04'
+        accountId:
+          type: integer
+          description: Account ID
+          example: 192473388
+        accountName:
+          type: integer
+          description: Name of account associated with movie list
+          example: Amy Miller
+        item:
+          type: array
+          description: Collection of movies
+          items:
+           $ref: '#/components/schemas/item'
+        itemCount:
+          type: integer
+          description: Number of movies contained in list
+          example: 1
+    item:
+      description: Information about a movie entry
+      type: object
+      properties:
+        movieName:
+          type: string
+          description: Name of a movie in the list
+          example: The Third Man
+        movieId:
+          type: integer
+          description: ID of a movie in the list
+          example: 285937822
+    deletedMovieListInfo:
+      description: Information about deleted movie list
+      type: object
+      properties:
+        listId:
+          type: integer
+          description: ID of the movie list
+          example: 238751
+        listName:
+          type: string
+          description: Name of the movie list
+          example: Film Noir Movies
+        listDescription:
+          type: string
+          description: Description of the movie list
+          example: List of film noir movies
+        accountId:
+          type: integer
+          description: Account ID
+          example: 192473388
+        accountName:
+          type: integer
+          description: Name of account associated with movie list
+          example: Amy Miller
+        deletedBy:
+          type: string
+          description: User name that updated the movie list
+          example: amy.miller@acme.com
+        deletedDate:
+          type: string
+          description: Date movie list was updated
+          example: '2018-03-04'
+    updateMovieInList:
+      description: Information about movie added to or removed from a movie list
+      type: object
+      properties:
+        listId:
+          type: integer
+          description: ID of the movie list
+          example: 1238751
+        listName:
+          type: string
+          description: Name of the movie list
+          example: Film Noir Movies
+        movieId:
+          type: integer
+          description: ID of the movie added to or removed from the list
+          example: 285937822
+        movieName:
+          type: string
+          description: Name of the movie added to or removed from the list
+          example: The Third Man
+        accountId:
+          type: integer
+          description: Account ID
+          example: 192473388
+        accountName:
+          type: string
+          description: Account name
+          example: Amy Miller
+        updatedBy:
+          type: string
+          description: User name that updated the movie list
+          example: amy.miller@acme.com
+        updatedDate:
+          type: string
+          description: Date movie list was updated
+          example: '2018-03-04'
+    addMovie:
+      description: Information about movie to add to movie list
+      type: object
+      properties:
+        movieId:
+          type: integer
+          description: ID of movie to add to the list
+          example: 285937822
+        movieName:
+          type: string
+          description: Name of the movie to add to the list
+          example: The Third Man
+        accountId:
+          type: integer
+          description: Account ID
+          example: 192473388
+        accountName:
+          type: string
+          description: Account name
+          example: Amy Miller
+    removeMovie:
+      description: Information about movie to remove from movie list
+      type: object
+      properties:
+        movieId:
+          type: integer
+          description: ID of the movie to remove from the list
+          example: 285937822
+        movieName:
+          type: string
+          description: Name of the movie to remove from the list
+          example: The Third Man
+        accountId:
+          type: integer
+          description: Account ID
+          example: 192473388
+        accountName:
+          type: string
+          description: Account name
+          example: Amy Miller
+          
+  requestBodies:
+    listBody:
+      description: Movie list to create
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/createList'
+    addMovieBody:
+      description: Movie to add
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/addMovie'
+    removeMovieBody:
+      description: Movie to remove
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/removeMovie'
+            
+# API key for all operations
+security:
+  - apiKey: []
+  
