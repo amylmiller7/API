@@ -6,12 +6,4 @@ Repository includes independent projects done involving API documentation.
   
 ## Notes
 
-To render files in browser:
-
-* Markdown files
-
-  Copy and paste markdown file content into online markdown editor such as stackedit.io.
-
-* YAML files
-
-  Copy and paste YAML file content into online Swagger editor at https://editor.swagger.io.
+To render YAML file in browser, copy and paste YAML file content into online Swagger editor at https://editor.swagger.io.
