@@ -170,14 +170,13 @@ Returns results starting with the 100th movie object in the results set.
 
 **Example response**
 
-The following is an example response payload for the request `GET /movies?page=5&pageSize10`.
+The following is an example response payload for the request `GET /movies?page=5&pageSize10`. The request returns page 5 of the results set with 10 items on the page. By default, the results set starts at item 0 in the collection.
 
 ```json
 {
-    "page": 5, // returns page 5 of the results set
-    "pageLimit": default, // returns all pages by default
-    "itemLimit": 10, // number of items on each page of the results set
-    "offset": default, // starts at item 0 in collection by default
+    "page": 5,
+    "itemLimit": 10,
+    "offset": default,
     ...
 }
 ```
