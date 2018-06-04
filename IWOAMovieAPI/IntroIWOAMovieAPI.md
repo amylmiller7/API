@@ -149,7 +149,7 @@ You can also check your rate limit by calling `GET /rateLimit`. Calling this end
 **Note:** To conserve the consumption of resources, when you reach your rate limit, the API does not return a 429 error. 
 
 ## <a id="pagination"></a>Pagination
-By default, the API endpoints return 10 pages with 25 items on each page per API request. You can modify the results for ````GET /accounts/{accountId}/lists```` and `GET /movies` with the following query parameters:
+By default, the API endpoints return 10 pages with 25 items on each page per API request. You can modify the results for `GET /accounts/{accountId}/lists` and `GET /movies` with the following query parameters:
 
 | Query parameter | Description | Notes |
 | --------------- | ----------- | ----- |
@@ -172,7 +172,7 @@ Returns results starting with the 100th movie object in the results set.
 
 The following is an example response payload for the request `GET /movies?page=5&pageSize10`.
 
-````json
+```json
 {
     "page": 5, // returns page 5 of the results set
     "pageLimit": default, // returns all pages by default
@@ -180,7 +180,7 @@ The following is an example response payload for the request `GET /movies?page=5
     "offset": default, // starts at item 0 in collection by default
     ...
 }
-````
+```
 For more information about pagination query parameters for `GET /accounts/{accountId}/lists` or `GET /movies`, see the Swagger documentation.
 
 
@@ -228,12 +228,12 @@ The error codes and messages provide detailed information about why a request fa
 | 70 | 504 | The request timed out. The server took too long to respond to a request. |
 
 **Example response**
-````json
+```json
 {  
     "errorCode": 20,
     "errorMessage": "Authentication failed due to an invalid API key. Retrieve a new API key from your account dashboard."
 }
-````
+```
 
 ## <a id="APIUpdates"></a>API updates
 2018-06-04 Introduced initial version of API.
