@@ -175,7 +175,7 @@ The following is an example response payload for the request `GET /movies?page=5
 ```json
 {
     "page": 5,
-    "itemLimit": 10,
+    "itemLimit": 10
 }
 ```
 For more information about pagination query parameters for `GET /accounts/{accountId}/lists` or `GET /movies`, see the Swagger documentation.
