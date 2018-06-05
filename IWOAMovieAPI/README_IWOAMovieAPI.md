@@ -8,6 +8,6 @@ README_IWOAMovieAPI
 
 **Summary:** Introductory and Swagger documentation for a mock API.
 
-**IntroIWOAMovieAPI:** Introductory documentation about how to use the API (Markdown file).
+**IntroIWOAMovieAPI:** Introductory documentation about how to use the mock API (Markdown file).
 
-**IWOAMovieAPI:** Swagger documentation that describes API endpoints, parameters, request bodies, and responses (YAML file).
+**IWOAMovieAPI:** Swagger documentation that describes mock API endpoints, parameters, request bodies, and responses (YAML file).

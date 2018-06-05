@@ -18,7 +18,7 @@
 - [API updates](#APIUpdates)
 
 ## <a id="what"></a>What is the IWOA Movie API?
-_Inside the World of Amy_ contains numerous movie reviews. The IWOA Movie API allows developers to access this database of movie reviews for use in their own applications. With the API, developers can allow their users to create and maintain lists of movies. For example, consumers of their applications could create, update, or delete lists of favorite movies, movies based on genre or release year, or flag movies that they want to watch. They could also add and remove movies from their different lists.
+_Inside the World of Amy_ contains numerous movie reviews. The mock IWOA Movie API allows developers to access this database of movie reviews for use in their own applications. With the API, developers can allow their users to create and maintain lists of movies. For example, consumers of their applications could create, update, or delete lists of favorite movies, movies based on genre or release year, or flag movies that they want to watch. They could also add and remove movies from their different lists.
 
 ## <a id="getStarted"></a>Getting started
 
