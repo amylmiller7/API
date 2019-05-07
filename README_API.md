@@ -1,8 +1,9 @@
 # API
-Repository includes independent projects done involving API documentation.
+Repository includes class assignments and independent projects done involving API documentation.
 
 ## Projects
 * IWOAMovieAPI
+* Learn Swagger and the Open API Specification
   
 ## Notes
 
